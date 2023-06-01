@@ -10,7 +10,7 @@
      
       <div class="tab">
         <h3
-          class="bluebg"
+          class="bluebg heading"
           :class="currentStep === 0 ? 'blue' : 'transparent'"
           @click="display(0)"
         >
@@ -25,7 +25,7 @@
               <!-- :class="{ active: userList === selectedItem }" -->
               <!-- <h3>step1</h3> -->
               <tr
-                v-for="(userList, index) in [...venturesItems].slice(0,5)"  
+                v-for="(userList, index) in [...venturesItems]"  
                 :key="index"
                
                 :class="[{ active: userList === selectedItem }, selectCircleClass(userList)]"
@@ -45,7 +45,7 @@
               <!-- <h3>step2</h3> -->
               <!-- :class="{ active: userList === selectedItem }" -->
               <tr
-                v-for="(userList, index) in [...digitalItems].slice(0, 5)"
+                v-for="(userList, index) in [...digitalItems]"
                 :key="index.form_type"
                
                 :class="[{ active: userList === selectedItem }, selectCircleClass(userList)]"
@@ -63,7 +63,7 @@
             <tbody>
               <!-- :class="{ active: userList === selectedItem }" -->
               <!-- <h3>step3</h3> -->
-              <tr v-for="userList in [...communityItems].slice(0,5)" :key="userList.index"
+              <tr v-for="userList in [...communityItems]" :key="userList.index"
               
                :class="[{ active: userList === selectedItem }, selectCircleClass(userList)]"
                 @click="showDetails(userList)">
@@ -77,7 +77,7 @@
         </div>
 
         <h3
-          :class="currentStep === 1 ? 'blue' : 'transparent'"
+          :class="currentStep === 1 ? 'blue heading' : 'transparent heading'"
           @click="display(1)"
           
         >
@@ -85,7 +85,7 @@
           >Digital ({{ digitalItems.length}})
         </h3>
 
-        <h3 :class="currentStep === 2 ? 'blue' : 'transparent'"
+        <h3 :class="currentStep === 2 ? 'blue heading' : 'transparent heading'"
           @click="display(2)">
           <span class="purplecircle" ></span>Community 
           ({{ communityItems.length }})
@@ -113,17 +113,39 @@
           </p>
           <p class="title">
             Email <br />
-            <span style="text-decoration: underline">
-              {{ selectedItem.email }}</span
-            >
+            <a :href="`tel:${selectedItem.email}`">{{ selectedItem.email }}</a>
           </p>
-          <p class="title">
+          <p v-if="selectedItem.phone" class="title">
+            Pitch Deck<br />
+            <a :href="`tel:${selectedItem.phone}`">{{ selectedItem.phone }}</a>
+          </p>
+          <p v-if="selectedItem.company" class="title">
             Company<br />
             <span class="para">{{ selectedItem.company }}</span>
           </p>
-          <p class="title">
+          <p v-if="selectedItem.country" class="title">
+            Country<br />
+            <span class="para">{{ selectedItem.country }}</span>
+          </p>
+          <p v-if="selectedItem.message" class="title">
             Message<br />
             <span class="para">{{ selectedItem.message }} </span>
+          </p>
+          <p v-if="selectedItem.about_company" class="title">
+            About Company<br />
+            <span class="para">{{ selectedItem.about_company }} </span>
+          </p>
+          <p v-if="selectedItem.pitch_deck" class="title">
+            Pitch Deck<br />
+            <a :href="selectedItem.pitch_deck">{{ selectedItem.pitch_deck }}</a>
+          </p>
+          <p v-if="selectedItem.linkedin" class="title">
+            LinkedIn<br />
+            <a :href="selectedItem.linkedin">{{ selectedItem.linkedin }}</a>
+          </p>
+          <p v-if="selectedItem.company_stage" class="title">
+            Company Stage<br />
+            <span class="para">{{ selectedItem.company_stage.toString() }} </span>
           </p>
         </div>
       </div>
@@ -179,13 +201,25 @@ export default {
       return date.toLocaleDateString(undefined, options);
     },
     venturesItems() {
-      return this.users.filter((users) => users.form_type === "ventures");
+      return this.users.filter((users) => users.form_type === "ventures").sort((a, b) => {
+        const dateA = new Date(a.created_at)
+        const dateB = new Date(b.created_at)
+        return dateB - dateA
+      });
     },
     digitalItems() {
-      return this.users.filter((users) => users.form_type === "digital" || users.form_type === '')
+      return this.users.filter((users) => users.form_type === "digital" || users.form_type === '').sort((a, b) => {
+        const dateA = new Date(a.created_at)
+        const dateB = new Date(b.created_at)
+        return dateB - dateA
+      });
     },
     communityItems() {
-      return this.users.filter((users) => users.form_type === "community");
+      return this.users.filter((users) => users.form_type === "community").sort((a, b) => {
+        const dateA = new Date(a.created_at)
+        const dateB = new Date(b.created_at)
+        return dateB - dateA
+      });
     }
   },
   
@@ -235,8 +269,15 @@ export default {
 };
 </script>
 <style scoped>
-
-
+.tab {
+  overflow-y: auto;
+}
+.heading {
+  position: sticky;
+  top: 0.5rem;
+  z-index: 1;
+  background-color: #FFF;
+}
 .circle::before {
   content: "";
   display: inline-block;
@@ -356,6 +397,9 @@ h3 {
   line-height: 28px;
   font-weight: 400;
 }
+.para {
+  white-space: pre-wrap;
+}
 .para span {
   width: 30px;
   padding: 100px;
@@ -449,7 +493,7 @@ td {
 tr {
   cursor: pointer;
   background: #fdfdfd;
-  height: 8vh;
+  height: 60px;
 }
 tr::before{
   margin-right: 28px;
@@ -473,8 +517,8 @@ table {
   left: 5px;
 }
 a {
-  text-decoration: none;
-  color: #000000;
+  color: #fb242a;
+  text-decoration: underline;
 }
 .blue {
   background-color: #e8e8e8;

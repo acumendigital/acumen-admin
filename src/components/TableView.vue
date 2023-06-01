@@ -123,7 +123,7 @@ export default {
         .get(URL)
         .then(res => {
           console.log(res.data)
-          this.users = res.data.data
+          this.users = res.data.data.reverse()
           console.log('this is recall')
         })
 
@@ -296,7 +296,7 @@ tr{
   /* padding-left: 20px; */
   border-radius: 20px;
   background: #FDFDFD ;
-  height:8vh;
+  height:80px;
 
  
 }

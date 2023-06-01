@@ -108,6 +108,9 @@ export default {
 </script>
 
 <style scoped>
+  section {
+    background: #FFFFFF;
+  }
 .mes{
   background: red;
   width:50px;
@@ -205,6 +208,7 @@ export default {
   border: 1px solid #000000;
   border-radius: 24px;
   padding: 10px 25px;
+  cursor: pointer;
 }
 .time {
   font-size: 12px;

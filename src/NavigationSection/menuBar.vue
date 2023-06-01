@@ -27,7 +27,7 @@ export default {
       const URL = "https://dolphin-app-4xaig.ondigitalocean.app/v1/contact";
       axios.get(URL).then((res) => {
         // console.log(res.data)
-        this.users = res.data;
+        this.users = res.data.reverse();
         console.log("this is recall");
       });
     },
