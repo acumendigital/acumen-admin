@@ -30,7 +30,7 @@
                
                 :class="[{ active: userList === selectedItem }, selectCircleClass(userList)]"
                 @click="showDetails(userList)"
-              >
+            >
                 <td>{{ userList.name }}</td>
                 <td>{{ userList.email }}</td>
                 <!-- <td>{{ userList.form_type }}</td> -->
@@ -182,7 +182,10 @@ export default {
     initialStep: {
       type: Number,
       default: 0,
-    }
+    },
+    
+
+      
     
   },
 
@@ -192,6 +195,7 @@ export default {
       hideComponent: true,
       currentTime: " ",
       selectedItem: null,
+      count:0
     };
   },
   computed: {
@@ -243,6 +247,10 @@ export default {
     hide() {
       this.hideComponent = false;
       this.$emit("goBack");
+    },
+    show(){
+      this.hideComponent = true;
+      this.$emit('noBack')
     },
 
     showDetails(userList) {

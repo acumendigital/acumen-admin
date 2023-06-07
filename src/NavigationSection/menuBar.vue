@@ -4,37 +4,34 @@
       <button class="gobackbutton" @click=" goBack()"><img src="@/assets/acumenlogo.svg"/></button>
      </div>
     <div>
-      <button class="redBtn" @click="getUsers">Refresh Data</button>
+      
+      <button class="redBtn"  @click="$emit('refresh')">Refresh Data</button>
+      
     </div>
   </div>
 </template>
 
 <script>
-import axios from "axios";
+
 export default {
+  emits:['refresh'],
+  
   data(){
     return{
-        users:[]
+
     }
   },
-  methods: {
-    // this is to refresh the entire window or page
-    // refreshPage() {
-    //   window.location.reload();
-    // },
+  
+  
 
-    getUsers() {
-      const URL = "https://dolphin-app-4xaig.ondigitalocean.app/v1/contact";
-      axios.get(URL).then((res) => {
-        // console.log(res.data)
-        this.users = res.data.reverse();
-        console.log("this is recall");
-      });
+  methods: {
+    
     },
     goBack() {
-    this.$router.go(0);
+    this.$router.go();
   },
-  },
+ 
+
 };
 </script>
 <style scoped>

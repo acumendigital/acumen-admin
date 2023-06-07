@@ -20,11 +20,12 @@
     </div> 
     
   <!-- <div> -->
-   
+    
+   <spin-loader v-if="isLoading === true"></spin-loader>
      
-   <table>
+   <table v-else>
      
-       
+    
        <tbody>
       
          <tr v-for="(user, index) in [...users].slice(0,5)" :key="index" @click="openComponent(index)" :class="selectCircleClass(user)" >
@@ -57,7 +58,7 @@
 </section>
 <div class="activeSection">
  
- <active-order v-if="isComponentOpen" :users="users"></active-order>
+ <active-order v-if="isComponentOpen" :users="users" :isLoading="isLoading"></active-order>
  
  <!-- this section allow us to click to each of the ventures -->
  
@@ -66,7 +67,7 @@
 
 
 <script>
-
+import spinLoader from './spinLoader.vue'
 import DashBoard from './DashBoard.vue';
 import ActiveOrder from './ActiveOrder.vue';
 import axios from 'axios'
@@ -81,7 +82,7 @@ export default {
   name:'TableViewDunni',
 
   el:"#app",
-  components:{ActiveOrder, DashBoard},
+  components:{ActiveOrder, DashBoard, spinLoader},
 
     data(){
       return{
@@ -89,7 +90,8 @@ export default {
         users:[],
         isComponentOpen: false,
         activeIndex: null,
-        isComponentBOpen: true
+        isComponentBOpen: true,
+        isLoading:true
     
        
       
@@ -118,15 +120,18 @@ export default {
         }
       },
        getUsers(){
+        this.users=[]
+        this.isLoading= true
         const URL = "https://dolphin-app-4xaig.ondigitalocean.app/v1/contact/";
         axios
         .get(URL)
         .then(res => {
           console.log(res.data)
-          this.users = res.data.data.reverse()
+          this.users = res.data.data
+          this.isLoading= false
           console.log('this is recall')
         })
-
+      
       },
       openComponent(index) {
       this.isComponentOpen = !this.isComponentOpen;
@@ -140,8 +145,10 @@ export default {
     },
   
   },
+
     mounted(){
       this.getUsers();
+      
       
     },
 

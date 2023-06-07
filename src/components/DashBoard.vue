@@ -31,6 +31,7 @@
       </div>
       <div class="activeSection">
         <active-order
+         
           v-if="componentToShow"
           @go-back="componentToShow=false"
           :initial-step="selectedStep"
@@ -48,13 +49,15 @@ import ActiveOrder from "./ActiveOrder.vue";
 import moment from "moment-timezone";
 export default {
   name:'DashBoard',
-  inject:['digitCount'],
+  
   components: { ActiveOrder },
   props: {
     users: {
       type: Array,
       required: true,
     },
+  
+      
     
    
   },
@@ -65,6 +68,7 @@ export default {
       currentTime: "",
       componentToShow: false,
       selectedStep:0,
+   
      
   
     };
