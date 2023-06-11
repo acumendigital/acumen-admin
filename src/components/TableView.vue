@@ -127,7 +127,7 @@ export default {
         .get(URL)
         .then(res => {
           console.log(res.data)
-          this.users = res.data.data
+          this.users = res.data.data.reverse()
           this.isLoading= false
           console.log('this is recall')
         })
