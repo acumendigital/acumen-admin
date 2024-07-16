@@ -126,10 +126,10 @@ export default {
         axios
         .get(URL)
         .then(res => {
-          console.log(res.data)
-          this.users = res.data.data.reverse()
+          const responseData = res.data.data
+          const updatedResponseData = responseData.filter(item => item.form_type !== "")
+          this.users = updatedResponseData.reverse()
           this.isLoading= false
-          console.log('this is recall')
         })
       
       },
