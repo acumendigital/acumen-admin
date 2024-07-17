@@ -127,7 +127,7 @@ export default {
         .get(URL)
         .then(res => {
           const responseData = res.data.data
-          const updatedResponseData = responseData.filter(item => item.form_type !== "")
+          const updatedResponseData = responseData.filter(item => item.form_type !== "" && (item.form_type === "ventures" || item.form_type === "digital" || item.form_type === "community"))
           this.users = updatedResponseData.reverse()
           this.isLoading= false
         })
