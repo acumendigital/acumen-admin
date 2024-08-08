@@ -57,9 +57,9 @@ export default {
   layout: "authAccessLayout",
   data() {
     return {
-      email: "admin@acumen.digital",
+      email: "",
       password: "",
-      passwordType: "password",
+      passwordType: "",
       error: null,
       response: null,
       isLoading: false,
@@ -240,6 +240,7 @@ form {
 .form-group .clear-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   width: 60px;
   float: right;
   color: #566ba0;
@@ -249,7 +250,7 @@ form {
   right: 8px;
   position: absolute;
   border: 0;
-  background: white;
+  background: transparent;
   font-size: 0.9rem;
   color: black;
   cursor: pointer;
