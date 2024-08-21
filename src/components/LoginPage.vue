@@ -2,7 +2,7 @@
   <div class="login-ctn section">
     <div class="inner">
       <div class="auth-box">
-        <div class="header">Welcome Back, <b>Ayo</b></div>
+        <div class="header">Welcome Back, <b>Admin</b></div>
         <div v-if="error" class="sub">Incorrect Password</div>
         <form @submit.prevent>
           <div class="form-group">
