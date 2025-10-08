@@ -1,12 +1,14 @@
 <template>
   <div class="menu">
-    <div>
-      <button class="gobackbutton" @click=" goBack()"><img src="@/assets/acumenlogo.svg"/></button>
-     </div>
-    <div>
-      
-      <button class="redBtn"  @click="$emit('refresh', true)">Refresh Data</button>
-      <button @click="logOut" class="logBtn">Log out</button>
+    <div class="menu__wrapper">
+      <div>
+        <button class="gobackbutton" @click=" goBack()"><img src="@/assets/acumenlogo.svg"/></button>
+      </div>
+      <div>
+        
+        <button class="redBtn"  @click="$emit('refresh', true)">Refresh Data</button>
+        <button @click="logOut" class="logBtn">Log out</button>
+      </div>
     </div>
   </div>
 </template>
@@ -31,13 +33,20 @@ const logOut = () => {
   font-family: "DM Sans", sans-serif;
 }
 .menu {
-  max-width: 100%;
+  width: 100%;
   display: flex;
   justify-content: center;
-  gap: 61rem;
   align-items: center;
   border-bottom: 1px solid #eaeaea;
   padding: 20px 0px;
+}
+.menu__wrapper {
+  max-width: 1200px;
+  width: 90%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .redBtn {
   background: #fb242a;

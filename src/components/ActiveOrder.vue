@@ -368,16 +368,17 @@ h3 {
 .wrapper {
   padding: 40px;
   display: flex;
-  max-width: 92%;
   justify-content: space-evenly;
   flex-wrap: nowrap;
   gap: 2rem;
   align-content: center;
   margin: 0 auto;
-  width: 1331px;
+  max-width: 1200px;
+  width: 90%;
 }
 .backbtn {
-  width: 1331px;
+  max-width: 1200px;
+  width: 90%;
   margin: 0 auto;
 }
 .tab {

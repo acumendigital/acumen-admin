@@ -117,8 +117,8 @@ onMounted(() => {
   border: none;
 }
 .userdetails {
+  max-width: 1200px;
   width: 90%;
-  max-width: 1324px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -142,14 +142,15 @@ onMounted(() => {
   align-content: center;
   margin: 0 auto;
   /* width: 90%; */
-  max-width: 1324px;
+  max-width: 1200px;
+  width: 90%;
   top: 2rem;
   bottom: 3rem;
 }
 .ventureBox {
   background: rgba(235, 255, 250, 1);
   font-weight: 400;
-  width: 400px;
+  width: 100%;
   height: 125px;
   border: 1px solid #000000;
   border-radius: 24px;
@@ -170,13 +171,13 @@ onMounted(() => {
   position: relative;
   font-size: 34px;
   line-height: 38px;
-  margin-left: 20rem;
+  text-align: right;
   /* left:20.5rem; */
   bottom: 0rem;
 }
 .digitalBox {
   background: #ffeded;
-  width: 400px;
+  width: 100%;
   height: 125px;
   border: 1px solid #000000;
   border-radius: 24px;
@@ -189,12 +190,12 @@ onMounted(() => {
   position: relative;
   font-size: 34px;
   line-height: 38px;
-  margin-left: 20rem;
+  text-align: right;
   bottom: 0rem;
 }
 .communityBox {
   background: #e9eeff;
-  width: 400px;
+  width: 100%;
   height: 125px;
   border: 1px solid #000000;
   border-radius: 24px;

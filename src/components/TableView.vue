@@ -1,8 +1,7 @@
 <template>
   <section>
     <dash-board :users="users" ></dash-board>
-    <div class="wrap" >
-
+    <div class="wrap">
       <div>
         <div class="subdetails">
           <div> <h3 class="recent">Most Recent Entries</h3></div>
@@ -28,14 +27,17 @@
               :key="index"
               @click="openComponent(index)"
               class="table-row"
-              :class="selectCircleClass(user)"
             >
-              <!-- <td v-text="user.name" class="cell1" ></td> -->
-              <td   class="cell1" >{{user.name}}</td>
+              <td class="cell1" >
+                <div
+                :class="selectCircleClass(user)"
+              ></div>
+              </td>
+              <td   class="cell" >{{user.name}}</td>
               <!-- new Date('2022-03-08T17:21:44.771Z').toString().substring(0, 21) -->
               <!-- (user.created_at) -->
               <td  class="cell">{{new Date(user.created_at).toString().substring(0, 21)}}</td>
-              <td  class="cellTwo">{{user.email}}</td>
+              <td  class="cell">{{user.email}}</td>
             </tr>
           </tbody>
         </table>
@@ -122,16 +124,15 @@ onMounted(() => {
 </script>
 
 <style scoped>
-
-
 .wrap{
   border: 1px solid #C4C4C4;
   border-radius:20px;
   top:5rem; 
   position: relative;
-  padding:80px 60px 40px 60px ;
+  padding:40px 60px 40px 60px ;
   height: auto;
   max-width: 1200px;
+  width: 80%;
   margin: 0 auto;
 
   /* height: 100vh;
@@ -184,16 +185,13 @@ onMounted(() => {
   top: 0.3rem;
 }
 h3{
-
-  margin-top:-30px;
   font-family: DM Sans;
-font-size: 16px;
-font-weight: 400;
-line-height: 24px;
-letter-spacing: 0px;
-text-align: left;
-margin-right: 20px;
-
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0px;
+  text-align: left;
+  margin-right: 20px;
 }
 .recent {
  font-family: DM Sans;
@@ -205,40 +203,8 @@ text-align: left;
 
 }
 
-
-tr::before{
-  content: "";
-  display:inline-block;
-  width:20px;
-  max-width: 20px;
-  height: 20px;
-  /* max-height: 20px; */
-  border-radius: 50%;
-  /* background-color:  #D3FFF4; */
-  margin-right: 17px;
-  position: relative;
-  margin-top:22px;
- /* top:1.5rem; */
-  text-align: center;
-  /* top: 0.5rem; */
- 
-}
-/* THIS IS COLOR FOR BULLETPOINTS */
-/* tbody tr:nth-of-type(even):before {
-  background-color: #FFDEDE;
-} */
-
-/* THIS IS COLOR FOR BULLETPOINTS */
-tr.red-circle::before {
-  background-color: #FFEEED;
-}
-
-tr.green-circle::before {
-  background-color: #EBFFFA ;
-}
-
-tr.blue-circle::before {
-  background-color: #E9EEFF;
+table {
+  width: 100%;
 }
 
 tr.table-row {
@@ -250,19 +216,30 @@ tr.table-row:hover {
   opacity: 0.7;
 }
 
+/* THIS IS COLOR FOR BULLETPOINTS */
+tr td.cell1 div {
+  display:block;
+  width:20px;
+  max-width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin: 17px;
+  position: relative;
+  margin-top:22px;
+  /* top: 0.5rem; */ 
+}
+tr td.cell1 .red-circle {
+  background-color: #FFEEED;
+}
 
+tr td.cell1 .green-circle {
+  background-color: #EBFFFA ;
+}
 
-.cell{
-  padding-left: 15rem;
- 
+tr td.cell1 .blue-circle {
+  background-color: #E9EEFF;
 }
-.cellTwo{
-  padding-left: 15rem;
-}
-.cell1{
-  padding-left: 3rem;
-  
-}
+
 div .activeSection{
   position: absolute;
   top:0;
