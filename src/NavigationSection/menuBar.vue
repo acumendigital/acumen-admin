@@ -6,7 +6,7 @@
       </div>
       <div>
         
-        <button class="redBtn"  @click="$emit('refresh', true)">Refresh Data</button>
+        <button class="redBtn"  @click="$emit('refresh')">Refresh Data</button>
         <button @click="logOut" class="logBtn">Log out</button>
       </div>
     </div>
@@ -15,14 +15,17 @@
 
 <script setup>
 import { useRouter } from 'vue-router';
+import { useAuthStore } from '../../store/authStore';
 
 const router = useRouter();
+const authStore = useAuthStore();
 
 const goBack = () => {
   router.go();
 }
 
 const logOut = () => {
+  authStore.logout();
   router.push("/login");
 }
 </script>

@@ -23,7 +23,7 @@
         <table v-else>
           <tbody>
             <tr
-              v-for="(user, index) in [...users].slice(0,5)"
+              v-for="(user, index) in users.slice(0,5)"
               :key="index"
               @click="openComponent(index)"
               class="table-row"
@@ -52,14 +52,21 @@
 
 <script setup>
 import axios from 'axios';
-import { ref, onMounted, defineEmits } from 'vue';
+import { ref, onMounted, defineEmits, watch, defineProps } from 'vue';
 import { useRouter } from 'vue-router';
 import spinLoader from './spinLoader.vue';
 import DashBoard from './DashBoard.vue';
 import ActiveOrder from './ActiveOrder.vue';
 import { useAuthStore } from '../../store/authStore';
 
-const emit = defineEmits(['refresh']);
+const props = defineProps({
+  refreshTrigger: {
+    type: Boolean,
+    default: false
+  }
+})
+
+const emit = defineEmits(['refreshed']);
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -70,6 +77,12 @@ const isComponentOpen = ref(false);
 const activeIndex = ref(null);
 const isComponentBOpen = ref(true);
 const isLoading = ref(true);
+
+watch(() => props.refreshTrigger, (isRefreshing) => {
+  if (isRefreshing) {
+    getUsers();
+  }
+});
 
 const selectCircleClass = (user) => {
   switch(user.form_type) {
@@ -97,10 +110,10 @@ const getUsers = async () => {
     const updatedResponseData = responseData.filter(item => item.form_type !== "" && (item.form_type === "ventures" || item.form_type === "digital" || item.form_type === "community"));
     users.value = updatedResponseData.reverse()
     isLoading.value = false;
-    emit('refresh', false);
+    emit('refreshed');
   })
   .catch(err => {
-    if (err.message.includes("400")) {
+    if (err.response?.status === 401 || err.response?.status === 400) {
       authStore.logout()
       router.push("/login")
     }

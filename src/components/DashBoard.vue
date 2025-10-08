@@ -80,7 +80,7 @@ const ventureCount = computed(() => {
 });
 
 const digitalCount = computed(() => {
-  return props.users.filter((users) => users.form_type === "" ).length + props.users.filter((users) => users.form_type === "digital").length
+  return props.users.filter((user) => user.form_type === "" || user.form_type === "digital").length
 });
 const communityCount = computed(() => {
   return props.users.filter((users) => users.form_type === "community")

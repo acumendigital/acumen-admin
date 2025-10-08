@@ -21,8 +21,8 @@ export const useAuthStore = defineStore('auth', {
     },
   },
   getters: {
-    isAuthenticated: (state) => !!state.token || Cookies.get('admin-token') !== null,
-    getUser: (state) => state.user || Cookies.get('admin-user') !== null,
+    isAuthenticated: (state) => !!state.token,
+    getUser: (state) => state.user,
   },
 })
 

@@ -23,7 +23,7 @@
               <!-- :class="{ active: userList === selectedItem }" -->
               <!-- <h3>step1</h3> -->
               <tr
-                v-for="(userList, index) in [...venturesItems]"
+                v-for="(userList, index) in venturesItems"
                 :key="index"
                 :class="[
                   { active: userList === selectedItem },
@@ -45,7 +45,7 @@
               <!-- <h3>step2</h3> -->
               <!-- :class="{ active: userList === selectedItem }" -->
               <tr
-                v-for="(userList, index) in [...digitalItems]"
+                v-for="(userList, index) in digitalItems"
                 :key="index.form_type"
                 :class="[
                   { active: userList === selectedItem },
@@ -66,7 +66,7 @@
               <!-- :class="{ active: userList === selectedItem }" -->
               <!-- <h3>step3</h3> -->
               <tr
-                v-for="userList in [...communityItems]"
+                v-for="userList in communityItems"
                 :key="userList.index"
                 :class="[
                   { active: userList === selectedItem },

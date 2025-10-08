@@ -1,9 +1,9 @@
 <template>
   <div>
-    <menuBar @refresh="handleRefresh"/>
+    <menuBar @refresh="refresh = true"/>
   
     <!-- <p>{{refreshKey}}</p> -->
-    <TableView @refresh="handleRefresh" />
+    <TableView :refresh-trigger="refresh" @refreshed="refresh = false" />
     
   </div>
 </template>
@@ -21,9 +21,6 @@
 
   const refresh = ref(false);
 
-  const handleRefresh = (val) => {
-    refresh.value = val;
-  }
 </script>
 
 <style scoped>
