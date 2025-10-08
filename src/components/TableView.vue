@@ -1,170 +1,151 @@
 <template>
   <section>
     <dash-board :users="users" ></dash-board>
-   <div class="wrap" >
-
-  <div>
-    <div class="subdetails">
-       <div> <h3 class="recent">Most Recent Entries</h3></div>
-        <div>
-          <h3 class="bluebg">
-            <span class="circle"></span>
-                Ventures
+    <div class="wrap">
+      <div>
+        <div class="subdetails">
+          <div> <h3 class="recent">Most Recent Entries</h3></div>
+            <div>
+              <h3 class="bluebg">
+                <span class="circle"></span>
+                    Ventures
+                
+              </h3>
             
-          </h3>
-         
-         <h3><span class="pinkcircle"></span>Digital</h3> 
-         <h3><span class="purplecircle"></span>Community</h3> 
+            <h3><span class="pinkcircle"></span>Digital</h3> 
+            <h3><span class="purplecircle"></span>Community</h3> 
+            </div>
+            <!-- <button class="redBtn" @click="changeUserName()">Refresh Data</button> -->
         </div>
-        <!-- <button class="redBtn" @click="changeUserName()">Refresh Data</button> -->
-    </div> 
-    
-  <!-- <div> -->
-    
-   <spin-loader v-if="isLoading === true"></spin-loader>
-     
-   <table v-else>
-     
-    
-       <tbody>
-      
-         <tr v-for="(user, index) in [...users].slice(0,5)" :key="index" @click="openComponent(index)" :class="selectCircleClass(user)" >
-          
-            <!-- <td v-text="user.name" class="cell1" ></td> -->
-            <td   class="cell1" >{{user.name}}</td>
-            <!-- new Date('2022-03-08T17:21:44.771Z').toString().substring(0, 21) -->
-            <!-- (user.created_at) -->
-             <td  class="cell">{{new Date(user.created_at).toString().substring(0, 21)}}</td>
-             <td  class="cellTwo">{{user.email}}</td>
-             
-         
-        </tr>
-       </tbody>
-       
-    </table>
-   
-  <!-- </div> -->
- 
-</div>
-
-</div>
-
-
- 
-
-
-
-
-</section>
-<div class="activeSection">
- 
- <active-order v-if="isComponentOpen" :users="users" :isLoading="isLoading"></active-order>
- 
- <!-- this section allow us to click to each of the ventures -->
- 
-</div>
+        
+        <spin-loader v-if="isLoading === true"></spin-loader>
+        
+        <table v-else>
+          <tbody>
+            <tr
+              v-for="(user, index) in users.slice(0,5)"
+              :key="index"
+              @click="openComponent(index)"
+              class="table-row"
+            >
+              <td class="cell1" >
+                <div
+                :class="selectCircleClass(user)"
+              ></div>
+              </td>
+              <td   class="cell" >{{user.name}}</td>
+              <!-- new Date('2022-03-08T17:21:44.771Z').toString().substring(0, 21) -->
+              <!-- (user.created_at) -->
+              <td  class="cell">{{new Date(user.created_at).toString().substring(0, 21)}}</td>
+              <td  class="cell">{{user.email}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+  <div class="activeSection">
+    <active-order v-if="isComponentOpen" :users="users" :isLoading="isLoading"></active-order>
+  <!-- this section allow us to click to each of the ventures -->
+  </div>
 </template>
 
-
-<script>
-import spinLoader from './spinLoader.vue'
+<script setup>
+import axios from 'axios';
+import { ref, onMounted, defineEmits, watch, defineProps } from 'vue';
+import { useRouter } from 'vue-router';
+import spinLoader from './spinLoader.vue';
 import DashBoard from './DashBoard.vue';
 import ActiveOrder from './ActiveOrder.vue';
-import axios from 'axios'
+import { useAuthStore } from '../../store/authStore';
 
-  // async function getCountries() {
-  //       const promise = await fetch("https://restcountries.com/v3.1/all");
-  //       const data = await promise.json();
-  //       console.log(data);
-  //     }
-  //     getCountries();
-export default {
-  name:'TableViewDunni',
+const props = defineProps({
+  refreshTrigger: {
+    type: Boolean,
+    default: false
+  }
+})
 
-  el:"#app",
-  components:{ActiveOrder, DashBoard, spinLoader},
+const emit = defineEmits(['refreshed']);
 
-    data(){
-      return{
-        message:'helo',
-        users:[],
-        isComponentOpen: false,
-        activeIndex: null,
-        isComponentBOpen: true,
-        isLoading:true
-    
-       
-      
-     
-      }
-     
-    },
-     
-    
-   methods:{
-      selectCircleClass (user) {
-        // if (user.form_type === 'ventures') {
-        //   return 'green-circle'
-        // } else if (user.form_type === 'community') {
-        //   return 'blue-circle'
-        // } else {
-        //   return 'red-circle'
-        // }
-        switch(user.form_type) {
-          case 'ventures':
-            return 'green-circle'
-          case 'community': 
-            return 'blue-circle'
-          default:
-            return 'red-circle'
-        }
-      },
-       getUsers(){
-        this.users=[]
-        this.isLoading= true
-        const URL = "https://dolphin-app-4xaig.ondigitalocean.app/v1/contact/";
-        axios
-        .get(URL)
-        .then(res => {
-          const responseData = res.data.data
-          const updatedResponseData = responseData.filter(item => item.form_type !== "" && (item.form_type === "ventures" || item.form_type === "digital" || item.form_type === "community"))
-          this.users = updatedResponseData.reverse()
-          this.isLoading= false
-        })
-      
-      },
-      openComponent(index) {
-      this.isComponentOpen = !this.isComponentOpen;
-      
-      this.isComponentBOpen = false;
-      this.activeIndex = index;
-    },
-    changeUserName() {
-      this.message = 'Data has been refreshed!';
-      this.$forceUpdate();
-    },
-  
-  },
+const authStore = useAuthStore();
+const router = useRouter();
 
-    mounted(){
-      this.getUsers();
-      
-      
-    },
+// const message = ref('hello');
+const users = ref([]);
+const isComponentOpen = ref(false);
+const activeIndex = ref(null);
+const isComponentBOpen = ref(true);
+const isLoading = ref(true);
 
+watch(() => props.refreshTrigger, (isRefreshing) => {
+  if (isRefreshing) {
+    getUsers();
+  }
+});
+
+const selectCircleClass = (user) => {
+  switch(user.form_type) {
+  case 'ventures':
+    return 'green-circle'
+  case 'community': 
+    return 'blue-circle'
+  default:
+    return 'red-circle'
+  }
 }
+
+const getUsers = async () => {
+  users.value = [];
+  isLoading.value = true;
+
+  const URL = "https://dolphin-app-4xaig.ondigitalocean.app/v1/admin/contact/";
+  axios.get(URL, {
+    headers: {
+      'Authorization': `Bearer ${authStore.token || ''}`
+    }
+  })
+  .then(res => {
+    const responseData = res.data.data;
+    const updatedResponseData = responseData.filter(item => item.form_type !== "" && (item.form_type === "ventures" || item.form_type === "digital" || item.form_type === "community"));
+    users.value = updatedResponseData.reverse()
+    isLoading.value = false;
+    emit('refreshed');
+  })
+  .catch(err => {
+    if (err.response?.status === 401 || err.response?.status === 400) {
+      authStore.logout()
+      router.push("/login")
+    }
+  })
+}
+
+const openComponent = (index) => {
+  isComponentOpen.value = !isComponentOpen.value;
+  isComponentBOpen.value = false;
+  activeIndex.value = index;
+}
+
+// const changeUserName = () => {
+//   message.value = 'Data has been refreshed!';
+
+// }
+
+onMounted(() => {
+  getUsers();
+})
 </script>
+
 <style scoped>
-
-
 .wrap{
   border: 1px solid #C4C4C4;
   border-radius:20px;
   top:5rem; 
   position: relative;
-  padding:80px 60px 40px 60px ;
+  padding:40px 60px 40px 60px ;
   height: auto;
   max-width: 1200px;
+  width: 80%;
   margin: 0 auto;
 
   /* height: 100vh;
@@ -217,16 +198,13 @@ export default {
   top: 0.3rem;
 }
 h3{
-
-  margin-top:-30px;
   font-family: DM Sans;
-font-size: 16px;
-font-weight: 400;
-line-height: 24px;
-letter-spacing: 0px;
-text-align: left;
-margin-right: 20px;
-
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0px;
+  text-align: left;
+  margin-right: 20px;
 }
 .recent {
  font-family: DM Sans;
@@ -238,55 +216,43 @@ text-align: left;
 
 }
 
+table {
+  width: 100%;
+}
 
-tr::before{
-  content: "";
-  display:inline-block;
+tr.table-row {
+  transition: all 0.3s ease-in-out;
+}
+
+tr.table-row:hover {
+  background-color: rgb(153 149 149 / 10%);
+  opacity: 0.7;
+}
+
+/* THIS IS COLOR FOR BULLETPOINTS */
+tr td.cell1 div {
+  display:block;
   width:20px;
   max-width: 20px;
   height: 20px;
-  /* max-height: 20px; */
   border-radius: 50%;
-  /* background-color:  #D3FFF4; */
-  margin-right: 17px;
+  margin: 17px;
   position: relative;
   margin-top:22px;
- /* top:1.5rem; */
-  text-align: center;
-  /* top: 0.5rem; */
- 
+  /* top: 0.5rem; */ 
 }
-/* THIS IS COLOR FOR BULLETPOINTS */
-/* tbody tr:nth-of-type(even):before {
-  background-color: #FFDEDE;
-} */
-
-/* THIS IS COLOR FOR BULLETPOINTS */
-tr.red-circle::before {
+tr td.cell1 .red-circle {
   background-color: #FFEEED;
 }
 
-tr.green-circle::before {
+tr td.cell1 .green-circle {
   background-color: #EBFFFA ;
 }
 
-tr.blue-circle::before {
+tr td.cell1 .blue-circle {
   background-color: #E9EEFF;
 }
 
-
-
-.cell{
-  padding-left: 15rem;
- 
-}
-.cellTwo{
-  padding-left: 15rem;
-}
-.cell1{
-  padding-left: 3rem;
-  
-}
 div .activeSection{
   position: absolute;
   top:0;

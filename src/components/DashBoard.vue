@@ -3,7 +3,7 @@
     <div>
    
       <div class="userdetails" >
-        <div><h3>Hello Ayo</h3></div>
+        <div><h3>Hello, {{ currentUserName }} 👋</h3></div>
         <div>
           <p>
             <b>{{ currentDate }}</b> <br />
@@ -33,7 +33,7 @@
         <active-order
          
           v-if="componentToShow"
-          @go-back="componentToShow=false"
+          @go-back="componentToShow=null"
           :initial-step="selectedStep"
           :users="users"
         ></active-order>
@@ -43,72 +43,59 @@
   </section>
 </template>
 
-<script>
-
+<script setup>
+import { defineProps, onMounted, ref, computed } from "vue";
 import ActiveOrder from "./ActiveOrder.vue";
 import moment from "moment-timezone";
-export default {
-  name:'DashBoard',
-  
-  components: { ActiveOrder },
-  props: {
-    users: {
-      type: Array,
-      required: true,
-    },
-  
-      
-    
-   
-  },
- 
-  data() {
-    return {
-     
-      currentTime: "",
-      componentToShow: false,
-      selectedStep:0,
-   
-     
-  
-    };
-  },
-  
-  methods: {
-    showComponentB(step) {
-      this.selectedStep = step
-      this.componentToShow = "display(val)";
-  
- 
-    }
-},
- 
-  computed: {
-    currentDate() {
-      const date = new Date();
-      const options = { month: "long", day: "numeric", weekday: "long" };
-      return date.toLocaleDateString(undefined, options);
-    },
-    
-    ventureCount(){
-       return this.users.filter((users) => users.form_type === "ventures")
-    },
-    digitalCount(){
-      
-       return this.users.filter((users) => users.form_type === "" ).length + this.users.filter((users) => users.form_type === "digital").length
-      
-    },
-    communityCount(){
-      return this.users.filter((users) => users.form_type === "community")
-    }
-   
-  },
-  mounted() {
-    moment.tz.setDefault("Africa/Lagos");
-    const nowInLagos = moment.tz("Africa/Lagos");
-    this.currentTime = nowInLagos.format("h:mm A");
-  },
-};
+import { useAuthStore } from "../../store/authStore";
+
+const props = defineProps({
+  users: {
+    type: Array,
+    required: true
+  }
+})
+
+const authStore = useAuthStore();
+
+const currentTime = ref("");
+const componentToShow = ref(null);
+const selectedStep = ref(0);
+
+const currentUserName = computed(() => {
+  if (authStore.user && authStore.user.name) {
+    return authStore.user.name
+  }
+  return 'Ayo'
+})
+
+const currentDate = computed(() => {
+  const date = new Date();
+  const options = { month: "long", day: "numeric", weekday: "long" };
+  return date.toLocaleDateString(undefined, options);
+});
+
+const ventureCount = computed(() => {
+  return props.users.filter((users) => users.form_type === "ventures")
+});
+
+const digitalCount = computed(() => {
+  return props.users.filter((user) => user.form_type === "" || user.form_type === "digital").length
+});
+const communityCount = computed(() => {
+  return props.users.filter((users) => users.form_type === "community")
+});
+
+const showComponentB = (step) => {
+  selectedStep.value = step;
+  componentToShow.value = "display(val)";
+}
+
+onMounted(() => {
+  moment.tz.setDefault("Africa/Lagos");
+  const nowInLagos = moment.tz("Africa/Lagos");
+  currentTime.value = nowInLagos.format("h:mm A");
+});
 </script>
 
 <style scoped>
@@ -130,10 +117,10 @@ export default {
   border: none;
 }
 .userdetails {
-  max-width: 100%;
+  max-width: 1200px;
+  width: 90%;
   display: flex;
-  justify-content: center;
-  gap: 69rem;
+  justify-content: space-between;
   align-items: center;
   margin: 0 auto;
  
@@ -155,14 +142,15 @@ export default {
   align-content: center;
   margin: 0 auto;
   /* width: 90%; */
-  max-width: 1324px;
+  max-width: 1200px;
+  width: 90%;
   top: 2rem;
   bottom: 3rem;
 }
 .ventureBox {
   background: rgba(235, 255, 250, 1);
   font-weight: 400;
-  width: 400px;
+  width: 100%;
   height: 125px;
   border: 1px solid #000000;
   border-radius: 24px;
@@ -183,13 +171,13 @@ export default {
   position: relative;
   font-size: 34px;
   line-height: 38px;
-  margin-left: 20rem;
+  text-align: right;
   /* left:20.5rem; */
   bottom: 0rem;
 }
 .digitalBox {
   background: #ffeded;
-  width: 400px;
+  width: 100%;
   height: 125px;
   border: 1px solid #000000;
   border-radius: 24px;
@@ -202,12 +190,12 @@ export default {
   position: relative;
   font-size: 34px;
   line-height: 38px;
-  margin-left: 20rem;
+  text-align: right;
   bottom: 0rem;
 }
 .communityBox {
   background: #e9eeff;
-  width: 400px;
+  width: 100%;
   height: 125px;
   border: 1px solid #000000;
   border-radius: 24px;
