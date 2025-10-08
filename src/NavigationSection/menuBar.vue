@@ -5,35 +5,26 @@
      </div>
     <div>
       
-      <button class="redBtn"  @click="$emit('refresh')">Refresh Data</button>
-      
+      <button class="redBtn"  @click="$emit('refresh', true)">Refresh Data</button>
+      <button @click="logOut" class="logBtn">Log out</button>
     </div>
   </div>
 </template>
 
-<script>
+<script setup>
+import { useRouter } from 'vue-router';
 
-export default {
-  emits:['refresh'],
-  
-  data(){
-    return{
+const router = useRouter();
 
-    }
-  },
-  
-  
+const goBack = () => {
+  router.go();
+}
 
-  methods: {
-    
-    },
-    goBack() {
-    this.$router.go();
-  },
- 
-
-};
+const logOut = () => {
+  router.push("/login");
+}
 </script>
+
 <style scoped>
 * {
   box-sizing: border-box;
@@ -56,6 +47,19 @@ export default {
   font-size: 18px;
   color: #fff;
   border: none;
+}
+
+.logBtn {
+  border: none;
+  background-color: transparent;
+  font-weight: bold;
+  font-size: 18px;
+  cursor: pointer;
+  transition: opacity 0.3s ease-in;
+}
+
+.logBtn:hover {
+  opacity: 0.7;
 }
 .gobackbutton{
   background: transparent;

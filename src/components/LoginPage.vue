@@ -50,48 +50,44 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref } from "vue";
+import { useRouter } from "vue-router";
 import Loader from "./Loader.vue";
-export default {
-  name: "LoginPage",
-  layout: "authAccessLayout",
-  data() {
-    return {
-      email: "",
-      password: "",
-      passwordType: "",
-      error: null,
-      response: null,
-      isLoading: false,
-    };
-  },
-  methods: {
-    async call() {},
-    async signIn() {
-      this.error = false;
-      this.isLoading = true;
-      const response = await fetch(
-        `https://dolphin-app-4xaig.ondigitalocean.app/v1/admin/login`,
-        {
-          method: "POST",
-          body: JSON.stringify({
-            email: this.email,
-            password: this.password,
-          }),
-        }
-      );
-      const user = await response.json();
-      this.isLoading = false;
-      if (user.data) {
-        this.$router.push("/dashboard");
-        this.$store.commit("setUser", user.data.admin);
-      } else {
-        this.error = true;
-      }
-    },
-  },
-  components: { Loader },
-};
+import { useAuthStore } from "../../store/authStore";
+
+const router = useRouter();
+const authStore = useAuthStore();
+
+const email = ref("");
+const password = ref("");
+const passwordType = ref("password");
+const error = ref(null);
+const isLoading = ref(false);
+
+const signIn = async () => {
+  error.value = false;
+  isLoading.value = true;
+  const response = await fetch(
+    `https://dolphin-app-4xaig.ondigitalocean.app/v1/admin/login`,
+    {
+      method: "POST",
+      body: JSON.stringify({
+        email: email.value,
+        password: password.value,
+      }),
+    }
+  );
+  const user = await response.json();
+  isLoading.value = false;
+  if (user.data) {
+    const responseData = user.data;
+    authStore.login(responseData.admin, responseData.token);
+    router.push("/dashboard");
+  } else {
+    error.value = true;
+  }
+}
 </script>
 
 <style scoped>
