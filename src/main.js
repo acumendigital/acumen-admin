@@ -1,5 +1,6 @@
 import './assets/index.css'
 import { createApp } from "vue";
+import { createPinia } from "pinia";
 import App from "./App.vue";
 
 import { createRouter, createWebHistory } from "vue-router";
@@ -38,7 +39,10 @@ router.beforeEach((to, from, next) => {
 });
 
 const app = createApp(App);
+const pinia = createPinia();
+
 app.use(router);
+app.use(pinia);
 
 app.mount("#app");
 export default router;
